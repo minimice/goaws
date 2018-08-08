@@ -17,4 +17,4 @@ EXPOSE 4100
 
 COPY --from=builder /go/src/github.com/p4tin/goaws/goaws_linux_amd64 /
 COPY ./app/conf/goaws.yaml /conf/
-ENTRYPOINT ["/goaws_linux_amd64"]
+CMD ["/goaws_linux_amd64"]

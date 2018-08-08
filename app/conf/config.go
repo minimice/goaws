@@ -3,6 +3,7 @@ package conf
 import (
 	"io/ioutil"
 	"path/filepath"
+	"os"
 
 	log "github.com/sirupsen/logrus"
 
@@ -15,7 +16,10 @@ import (
 var envs map[string]app.Environment
 
 func LoadYamlConfig(filename string, env string) []string {
-	ports := []string{"4100"}
+	ports := []string{os.Getenv("PORT")}
+	// []string{"4100"}
+
+	log.Warnf("Port number: %s", os.Getenv("PORT"))
 
 	if filename == "" {
 		filename, _ = filepath.Abs("./conf/goaws.yaml")
@@ -40,7 +44,8 @@ func LoadYamlConfig(filename string, env string) []string {
 	}
 
 	if envs[env].Port != "" {
-		ports = []string{envs[env].Port}
+		// Ignore the goaws port setting and use ENV variable
+		// ports = []string{envs[env].Port}
 	} else if envs[env].SqsPort != "" && envs[env].SnsPort != "" {
 		ports = []string{envs[env].SqsPort, envs[env].SnsPort}
 		app.CurrentEnvironment.Port = envs[env].SqsPort
