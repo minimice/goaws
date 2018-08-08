@@ -53,6 +53,8 @@ func LoadYamlConfig(filename string, env string) []string {
 
 	app.CurrentEnvironment = envs[env]
 
+	app.CurrentEnvironment.Port = os.Getenv("PORT")
+
 	common.LogMessages = false
 	common.LogFile = "./goaws_messages.log"
 
@@ -72,6 +74,9 @@ func LoadYamlConfig(filename string, env string) []string {
 	for _, queue := range envs[env].Queues {
 		queueUrl := "http://" + app.CurrentEnvironment.Host + ":" + app.CurrentEnvironment.Port + "/queue/" + queue.Name
 		queueArn := "arn:aws:sqs:" + app.CurrentEnvironment.Region + ":000000000000:" + queue.Name
+
+		log.Warnf("Queue url: %s", queueUrl)
+		log.Warnf("Queue arn: %s", queueArn)
 
 		if queue.ReceiveMessageWaitTimeSeconds == 0 {
 			queue.ReceiveMessageWaitTimeSeconds = app.CurrentEnvironment.QueueAttributeDefaults.ReceiveMessageWaitTimeSeconds
@@ -98,6 +103,10 @@ func LoadYamlConfig(filename string, env string) []string {
 				//Queue does not exist yet, create it.
 				queueUrl := "http://" + app.CurrentEnvironment.Host + ":" + app.CurrentEnvironment.Port + "/queue/" + subs.QueueName
 				queueArn := "arn:aws:sqs:" + app.CurrentEnvironment.Region + ":000000000000:" + subs.QueueName
+
+				log.Warnf("Queue url: %s", queueUrl)
+				log.Warnf("Queue arn: %s", queueArn)
+								
 				app.SyncQueues.Queues[subs.QueueName] = &app.Queue{
 					Name:                subs.QueueName,
 					TimeoutSecs:         app.CurrentEnvironment.QueueAttributeDefaults.VisibilityTimeout,
