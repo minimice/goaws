@@ -4,7 +4,7 @@ I modified this to allow for deploying to heroku.  Credits to [p4tin](https://gi
 
 ## Quick Start
 
-Build and test the queue using the following commands
+Build and test the queue using the following commands. *Only http is supported*.
 ```
 set APP_NAME=cg-queue
 heroku apps:destroy --confirm %APP_NAME%
