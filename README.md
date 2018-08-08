@@ -1,4 +1,22 @@
-# GoAws
+# GoAws for Heroku
+
+I modified this to allow for deploying to heroku.  Credits to [p4tin](https://github.com/p4tin/goaws).
+
+## Quick Start
+
+Build and test the queue using the following commands
+```
+set APP_NAME=cg-queue
+heroku apps:destroy --confirm %APP_NAME%
+heroku create %APP_NAME%
+heroku container:push web --app %APP_NAME%
+heroku container:release web --app %APP_NAME%
+aws --endpoint-url http://cg-queue.herokuapp.com sqs list-queues
+aws --endpoint-url http://cg-queue.herokuapp.com sqs send-message --queue-url http://cg-queue.herokuapp.com/queue/local-queue1 --message-body "This is a test of the
+GoAws Queue messaging"
+aws --endpoint-url http://cg-queue.herokuapp.com sqs receive-message --queue-url http://cg-queue.herokuapp.com/queue/local-queue1
+aws --endpoint-url http://cg-queue.herokuapp.com sns list-topics
+```
 
 Written in Go this is a clone of the AWS SQS/SNS systems.  This system is designed to emulate SQS and SNS in a local environment so developers can test their interfaces without having to connect to the AWS Cloud and possibly incurring the expense, or even worse actually write to production topics/queues by mistake.  If you see any problems or would like to see a new feature, please open an issue here in github.  As well, I will logon to Gitter so we can discuss your deployment issues or the weather.
 
